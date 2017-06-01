@@ -50,7 +50,7 @@ public class YoutubeConnector {
         try {
             SearchListResponse response = query.execute();
             List<SearchResult> results = response.getItems();
-            List<VideoItem> items = new ArrayList<>();
+            List<VideoItem> items = new ArrayList<VideoItem>();
 
             for(SearchResult result : results){
                 VideoItem item = new VideoItem();
