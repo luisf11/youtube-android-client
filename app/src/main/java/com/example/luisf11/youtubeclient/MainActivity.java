@@ -1,11 +1,9 @@
 package com.example.luisf11.youtubeclient;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
 
     private EditText searchInput;
     private ListView videosFound;
@@ -50,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
                return true;
             }
         });
-        addClickListerner();
+        addClickListener();
     }
 
     private void searchOnYoutube(final String keywords){
@@ -64,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
                                  @Override
                                  public void run() {
                                     updateVideosFound();
+
                                  }
                              });
             }
@@ -72,9 +71,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateVideosFound(){
         ArrayAdapter<VideoItem> adapter = new ArrayAdapter<VideoItem>(getApplicationContext(), R.layout.video_item, searchResults){
-            @NonNull
             @Override
-            public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+            public View getView(int position, View convertView, ViewGroup parent) {
                 if(convertView == null){
                     convertView = getLayoutInflater().inflate(R.layout.video_item,parent, false);
                 }
@@ -96,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         };
         videosFound.setAdapter(adapter);
     }
-    private void addClickListerner(){
+    private void addClickListener(){
         videosFound.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

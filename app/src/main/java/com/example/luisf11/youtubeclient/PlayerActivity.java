@@ -1,6 +1,6 @@
 package com.example.luisf11.youtubeclient;
 
-import android.app.Activity;
+
 
 import android.os.Bundle;
 import android.widget.Toast;
@@ -19,12 +19,15 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+
+        playerView = (YouTubePlayerView) findViewById(R.id.player_view);
+        playerView.initialize(YoutubeConnector.KEY,this);
     }
 
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         if (!b){
-            youTubePlayer.cueVideo(getIntent().getStringExtra("VIDEO_id"));
+            youTubePlayer.cueVideo(getIntent().getStringExtra("VIDEO_ID"));
         }
     }
 
