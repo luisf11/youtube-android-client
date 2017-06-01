@@ -52,6 +52,7 @@ public class YoutubeConnector {
 
             for(SearchResult result : results){
                 VideoItem item = new VideoItem();
+                
                 item.setTitle(result.getSnippet().getTitle());
                 item.setDescription(result.getSnippet().getDescription());
                 item.setThumbnailURL(result.getSnippet().getThumbnails().getDefault().getUrl());
