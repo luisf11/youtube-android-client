@@ -35,12 +35,14 @@ public class YoutubeConnector {
         }).setApplicationName(context.getString(R.string.app_name)).build();
 
         try {
-            query = youTube.search().list("id.snippet");
+            query = youTube.search().list("id,snippet");
             query.setKey(KEY);
             query.setType("video");
             query.setFields("items(id/videoId,snippet/title,snippet/description,snippet/thumbnails/default/url)");
+            System.out.println("connected sucessfully");
         }catch (IOException e){
             Log.d("YC", "Could not initialize: "+ e.getMessage());
+
         }
     }
     public List<VideoItem> search(String keywords){
@@ -48,7 +50,7 @@ public class YoutubeConnector {
         try {
             SearchListResponse response = query.execute();
             List<SearchResult> results = response.getItems();
-            List<VideoItem> items = new ArrayList<VideoItem>();
+            List<VideoItem> items = new ArrayList<>();
 
             for(SearchResult result : results){
                 VideoItem item = new VideoItem();
