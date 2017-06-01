@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
                if (actionId == EditorInfo.IME_ACTION_DONE){
                    searchOnYoutube(v.getText().toString());
                    return false;
@@ -85,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
                 VideoItem searchResult = searchResults.get(position);
 
                 Picasso.with(getApplicationContext()).load(searchResult.getThumbnailURL()).into(thumbnail);
-                title.setText(searchResult.getDescription());
+                title.setText(searchResult.getTitle());
+                description.setText(searchResult.getDescription());
                 return convertView;
 
 
