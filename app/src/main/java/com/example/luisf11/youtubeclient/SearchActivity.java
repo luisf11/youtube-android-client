@@ -51,7 +51,7 @@ public class SearchActivity extends Activity {
             }
         });
 
-//        addClickListener();
+        addClickListener();
 
 
 
@@ -77,40 +77,30 @@ public class SearchActivity extends Activity {
     }
 
     private void updateVideosFound(){
-//        ArrayAdapter<VideoItem> adapter = new ArrayAdapter<VideoItem>(getApplicationContext(), R.layout.video_item, searchResults){
-//            @Override
-//            public View getView(int position, View convertView, ViewGroup parent) {
-//                ViewHolder holder;
-//                if(convertView == null){
-//                    convertView = getLayoutInflater().inflate(R.layout.video_item,parent, false);
-//                    holder = new ViewHolder();
-//                    holder.thumbnail = (ImageView) convertView.findViewById(R.id.video_thumbnail);
-//                    holder.title = (TextView) convertView.findViewById(R.id.video_title);
-//                    holder.description = (TextView) convertView.findViewById(R.id.video_description);
-//                    convertView.setTag(holder);
-//                }else {
-//                    holder = (ViewHolder) convertView.getTag();
-//                }
-//
-//
-//
-//                VideoItem searchResult = searchResults.get(position);
-//
-//                Picasso.with(getApplicationContext()).load(searchResult.getThumbnailURL()).into(thumbnail);
-//                title.setText(searchResult.getTitle());
-//                description.setText(searchResult.getDescription());
-//                return convertView;
-//
-//
-//
-//            }
-//        };
-//        videosFound.setAdapter(adapter);
+        ArrayAdapter<VideoItem> adapter = new ArrayAdapter<VideoItem>(getApplicationContext(), R.layout.video_item, searchResults){
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                if(convertView == null){
+                    convertView = getLayoutInflater().inflate(R.layout.video_item, parent, false);
+                }
+                ImageView thumbnail = (ImageView)convertView.findViewById(R.id.video_thumbnail);
+                TextView title = (TextView)convertView.findViewById(R.id.video_title);
+                TextView description = (TextView)convertView.findViewById(R.id.video_description);
+
+                VideoItem searchResult = searchResults.get(position);
+
+                Picasso.with(getApplicationContext()).load(searchResult.getThumbnailURL()).into(thumbnail);
+                title.setText(searchResult.getTitle());
+                description.setText(searchResult.getDescription());
+                return convertView;
+            }
+        };
+        videosFound.setAdapter(adapter);
 //        videoAdapter.addAll(searchResults);
         //videosFound.setAdapter(videoAdapter);
         //videoAdapter.notifyAll();
-        videoAdapter = new VideoAdapter(getApplicationContext(),searchResults);
-        videosFound.setAdapter(videoAdapter);
+//        videoAdapter = new VideoAdapter(getApplicationContext(),searchResults);
+//        videosFound.setAdapter(videoAdapter);
     }
     private void addClickListener(){
         videosFound.setOnItemClickListener(new AdapterView.OnItemClickListener() {
