@@ -45,13 +45,13 @@ public class YoutubeConnector {
 
         }
     }
-    public List<VideoItem> search(String keywords){
+    public ArrayList<VideoItem> search(String keywords){
         query.setQ(keywords);
         try {
             SearchListResponse response = query.execute();
             List<SearchResult> results = response.getItems();
 
-            List<VideoItem> items = new ArrayList<>();
+            ArrayList<VideoItem> items = new ArrayList<>();
             for(SearchResult result : results){
                 VideoItem item = new VideoItem();
                 
