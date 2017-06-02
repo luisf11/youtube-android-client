@@ -19,10 +19,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class SearchActivity extends Activity {
 
     private EditText searchInput;
     private ListView videosFound;
+
     private Handler handler;
 
     private List<VideoItem> searchResults;
@@ -30,12 +31,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_search);
 
         searchInput = (EditText) findViewById(R.id.search_input);
         videosFound = (ListView) findViewById(R.id.videos_found);
 
         handler = new Handler();
+
+        addClickListener();
 
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -48,14 +51,14 @@ public class MainActivity extends Activity {
                return true;
             }
         });
-        addClickListener();
+//        addClickListener();
     }
 
     private void searchOnYoutube(final String keywords){
         new Thread(){
             @Override
             public void run() {
-                YoutubeConnector yc = new YoutubeConnector(MainActivity.this);
+                YoutubeConnector yc = new YoutubeConnector(SearchActivity.this);
                 searchResults = yc.search(keywords);
                 handler.post(new Runnable(){
 
