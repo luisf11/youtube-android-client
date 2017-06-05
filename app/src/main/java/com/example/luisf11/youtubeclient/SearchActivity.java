@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -25,6 +26,7 @@ public class SearchActivity extends Activity {
 
     private EditText searchInput;
     private ListView videosFound;
+    private Button searchButton;
     private VideoAdapter videoAdapter;
     private Handler handler;
 
@@ -36,7 +38,7 @@ public class SearchActivity extends Activity {
         setContentView(R.layout.activity_search);
         searchInput = (EditText) findViewById(R.id.search_input);
         videosFound = (ListView) findViewById(R.id.videos_found);
-
+        searchButton = (Button) findViewById(R.id.button_search);
         handler = new Handler();
 
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -53,7 +55,12 @@ public class SearchActivity extends Activity {
 
         addClickListener();
 
-
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               searchOnYoutube(searchInput.getText().toString());
+            }
+        });
 
 
 
