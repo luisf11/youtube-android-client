@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,24 +18,27 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public class MainActivity extends Activity {
+
+
+public class SearchActivity extends Activity {
 
     private EditText searchInput;
     private ListView videosFound;
+    private Button searchButton;
+    private VideoAdapter videoAdapter;
     private Handler handler;
 
-    private List<VideoItem> searchResults;
+    private ArrayList<VideoItem> searchResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        setContentView(R.layout.activity_search);
         searchInput = (EditText) findViewById(R.id.search_input);
         videosFound = (ListView) findViewById(R.id.videos_found);
-
+        searchButton = (Button) findViewById(R.id.button_search);
         handler = new Handler();
 
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -48,20 +52,30 @@ public class MainActivity extends Activity {
                return true;
             }
         });
+
         addClickListener();
+
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               searchOnYoutube(searchInput.getText().toString());
+            }
+        });
+        
     }
 
     private void searchOnYoutube(final String keywords){
         new Thread(){
             @Override
             public void run() {
-                YoutubeConnector yc = new YoutubeConnector(MainActivity.this);
+                YoutubeConnector yc = new YoutubeConnector(SearchActivity.this);
                 searchResults = yc.search(keywords);
                 handler.post(new Runnable(){
 
                                  @Override
                                  public void run() {
                                     updateVideosFound();
+
                                  }
                              });
             }
@@ -73,12 +87,11 @@ public class MainActivity extends Activity {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 if(convertView == null){
-                    convertView = getLayoutInflater().inflate(R.layout.video_item,parent, false);
+                    convertView = getLayoutInflater().inflate(R.layout.video_item, parent, false);
                 }
-
-                ImageView thumbnail = (ImageView) convertView.findViewById(R.id.video_thumbnail);
-                TextView title = (TextView) convertView.findViewById(R.id.video_title);
-                TextView description = (TextView) convertView.findViewById(R.id.video_description);
+                ImageView thumbnail = (ImageView)convertView.findViewById(R.id.video_thumbnail);
+                TextView title = (TextView)convertView.findViewById(R.id.video_title);
+                TextView description = (TextView)convertView.findViewById(R.id.video_description);
 
                 VideoItem searchResult = searchResults.get(position);
 
@@ -86,12 +99,14 @@ public class MainActivity extends Activity {
                 title.setText(searchResult.getTitle());
                 description.setText(searchResult.getDescription());
                 return convertView;
-
-
-
             }
         };
         videosFound.setAdapter(adapter);
+//        videoAdapter.addAll(searchResults);
+        //videosFound.setAdapter(videoAdapter);
+        //videoAdapter.notifyAll();
+//        videoAdapter = new VideoAdapter(getApplicationContext(),searchResults);
+//        videosFound.setAdapter(videoAdapter);
     }
     private void addClickListener(){
         videosFound.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -103,4 +118,6 @@ public class MainActivity extends Activity {
             }
         });
     }
+
+
 }

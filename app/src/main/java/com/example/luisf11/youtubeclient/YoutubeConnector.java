@@ -25,6 +25,7 @@ public class YoutubeConnector {
     private YouTube.Search.List query;
 
     public static final  String KEY = "AIzaSyCGTKqQDTW4Zqz_1_SPcY_XNgrod-YIr_M";
+    public static final  long MAX_RESULTS = 30l;
 
     public YoutubeConnector(Context context){
         youTube = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), new HttpRequestInitializer() {
@@ -39,19 +40,22 @@ public class YoutubeConnector {
             query.setKey(KEY);
             query.setType("video");
             query.setFields("items(id/videoId,snippet/title,snippet/description,snippet/thumbnails/default/url)");
-            System.out.println("connected sucessfully");
+            query.setMaxResults(MAX_RESULTS);
+
         }catch (IOException e){
             Log.d("YC", "Could not initialize: "+ e.getMessage());
 
         }
     }
-    public List<VideoItem> search(String keywords){
+    public ArrayList<VideoItem> search(String keywords){
         query.setQ(keywords);
         try {
             SearchListResponse response = query.execute();
             List<SearchResult> results = response.getItems();
-            List<VideoItem> items = new ArrayList<>();
 
+
+
+            ArrayList<VideoItem> items = new ArrayList<>();
             for(SearchResult result : results){
                 VideoItem item = new VideoItem();
                 
