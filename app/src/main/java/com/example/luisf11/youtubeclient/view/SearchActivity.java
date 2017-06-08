@@ -1,4 +1,4 @@
-package com.example.luisf11.youtubeclient;
+package com.example.luisf11.youtubeclient.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,6 +17,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.luisf11.youtubeclient.R;
+import com.example.luisf11.youtubeclient.adapters.VideoAdapter;
+import com.example.luisf11.youtubeclient.models.VideoItem;
+import com.example.luisf11.youtubeclient.utils.YoutubeConnector;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

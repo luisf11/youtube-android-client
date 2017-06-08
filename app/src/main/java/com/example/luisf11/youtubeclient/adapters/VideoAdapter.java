@@ -1,4 +1,4 @@
-package com.example.luisf11.youtubeclient;
+package com.example.luisf11.youtubeclient.adapters;
 
 
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.luisf11.youtubeclient.R;
+import com.example.luisf11.youtubeclient.models.VideoItem;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -38,7 +40,7 @@ public class VideoAdapter extends ArrayAdapter<VideoItem>{
    }
 
 public VideoAdapter(Context context, ArrayList<VideoItem> videos){
-    super(context,R.layout.activity_search,videos);
+    super(context, R.layout.activity_search,videos);
     this.list_videos = videos;
 }
 

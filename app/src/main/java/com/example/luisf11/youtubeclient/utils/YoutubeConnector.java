@@ -1,10 +1,13 @@
-package com.example.luisf11.youtubeclient;
+package com.example.luisf11.youtubeclient.utils;
 
 import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.example.luisf11.youtubeclient.R;
+import com.example.luisf11.youtubeclient.models.VideoItem;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.http.javanet.NetHttpTransport;

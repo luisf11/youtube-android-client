@@ -1,4 +1,4 @@
-package com.example.luisf11.youtubeclient;
+package com.example.luisf11.youtubeclient.models;
 
 /**
  * Created by luisf11 on 28/05/17.

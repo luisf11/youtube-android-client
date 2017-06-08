@@ -1,10 +1,12 @@
-package com.example.luisf11.youtubeclient;
+package com.example.luisf11.youtubeclient.view;
 
 
 
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.example.luisf11.youtubeclient.R;
+import com.example.luisf11.youtubeclient.utils.YoutubeConnector;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
