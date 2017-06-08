@@ -2,7 +2,10 @@ package com.example.luisf11.youtubeclient.view;
 
 
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
 import com.example.luisf11.youtubeclient.R;
@@ -16,6 +19,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
 
     private YouTubePlayerView playerView;
+    private AudioManager audio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +28,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
         playerView = (YouTubePlayerView) findViewById(R.id.player_view);
         playerView.initialize(YoutubeConnector.KEY,this);
+        audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     }
 
     @Override
@@ -36,5 +41,22 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     @Override
     public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult youTubeInitializationResult) {
         Toast.makeText(this,"Initialization Failed",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onTrackballEvent(MotionEvent event) {
+        int AXIS_VSCROLL =0;
+//        event.getAxisValue(AXIS_VSCROLL);
+        if ( event.getAxisValue(AXIS_VSCROLL)==1){
+            audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                    AudioManager.ADJUST_RAISE,AudioManager.FLAG_SHOW_UI);
+            return true;
+        }else if( event.getAxisValue(AXIS_VSCROLL)==-1){
+            audio.adjustStreamVolume(AudioManager.STREAM_MUSIC,
+                    AudioManager.ADJUST_LOWER,AudioManager.FLAG_SHOW_UI);
+            return true;
+        }
+        return  false;
+//        return super.onTrackballEvent(event);
     }
 }

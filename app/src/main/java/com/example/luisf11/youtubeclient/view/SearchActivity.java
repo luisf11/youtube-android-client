@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.UiThread;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,11 +81,17 @@ public class SearchActivity extends Activity {
             public void run() {
                 YoutubeConnector yc = new YoutubeConnector(SearchActivity.this);
                 searchResults = yc.search(keywords);
+//                runOnUiThread(new Runnable(){
+//                    @Override
+//                    public void run() {
+//                        updateVideosFound();
+//
+//                    }
+//                });
                 handler.post(new Runnable(){
-
-                                 @Override
-                                 public void run() {
-                                    updateVideosFound();
+                    @Override
+                        public void run() {
+                            updateVideosFound();
 
                                  }
                              });
