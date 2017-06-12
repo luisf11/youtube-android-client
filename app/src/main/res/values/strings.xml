@@ -4,4 +4,8 @@
     <string name="title_activity_player">PlayerActivity</string>
     <string name="search_hint">Search...</string>
     <string name="button_search">Search</string>
+
+    <string name="hint_ip">Ip address</string>
+    <string name="hint_port">Port</string>
+    <string name="hint_prefix">Prefix</string>
 </resources>

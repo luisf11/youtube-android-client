@@ -1,12 +1,16 @@
 package com.example.luisf11.youtubeclient.view;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.UiThread;
+
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -48,7 +52,7 @@ public class SearchActivity extends Activity {
         videosFound = (ListView) findViewById(R.id.videos_found);
         searchButton = (Button) findViewById(R.id.button_search);
         handler = new Handler();
-
+        showDialog();
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -81,20 +85,20 @@ public class SearchActivity extends Activity {
             public void run() {
                 YoutubeConnector yc = new YoutubeConnector(SearchActivity.this);
                 searchResults = yc.search(keywords);
-//                runOnUiThread(new Runnable(){
-//                    @Override
-//                    public void run() {
-//                        updateVideosFound();
-//
-//                    }
-//                });
-                handler.post(new Runnable(){
+                runOnUiThread(new Runnable(){
                     @Override
-                        public void run() {
-                            updateVideosFound();
+                    public void run() {
+                        updateVideosFound();
 
-                                 }
-                             });
+                    }
+                });
+//                handler.post(new Runnable(){
+//                    @Override
+//                        public void run() {
+//                            updateVideosFound();
+//
+//                                 }
+//                             });
             }
         }.start();
     }
@@ -130,6 +134,29 @@ public class SearchActivity extends Activity {
                 startActivity(intent);
             }
         });
+    }
+
+    public void showDialog(){
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.server_config,null);
+        dialogBuilder.setView(dialogView);
+
+        dialogBuilder.setPositiveButton("Done",new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        AlertDialog b = dialogBuilder.create();
+        b.show();
     }
 
     @Override
