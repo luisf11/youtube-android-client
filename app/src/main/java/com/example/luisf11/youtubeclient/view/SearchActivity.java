@@ -52,7 +52,7 @@ public class SearchActivity extends Activity {
         videosFound = (ListView) findViewById(R.id.videos_found);
         searchButton = (Button) findViewById(R.id.button_search);
         handler = new Handler();
-        showDialog();
+//        showDialog();
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
