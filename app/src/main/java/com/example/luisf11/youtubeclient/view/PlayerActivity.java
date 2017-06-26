@@ -7,6 +7,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.luisf11.youtubeclient.R;
@@ -30,6 +31,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         playerView = (YouTubePlayerView) findViewById(R.id.player_view);
         playerView.initialize(YoutubeConnector.KEY,this);
         audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
     }
 
     @Override
@@ -46,7 +48,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
-        Log.i("hey listen","hey Listen");
+
         int AXIS_VSCROLL =0;
 //        event.getAxisValue(AXIS_VSCROLL);
         if ( event.getAxisValue(MotionEvent.AXIS_VSCROLL)==1){
@@ -61,6 +63,17 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
       //  return  false;
 
         return super.onGenericMotionEvent(event);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //hide soft buttons
+
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
     @Override

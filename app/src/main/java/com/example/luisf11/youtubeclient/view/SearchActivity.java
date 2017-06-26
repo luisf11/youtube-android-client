@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +25,9 @@ import android.widget.TextView;
 
 import com.example.luisf11.youtubeclient.R;
 import com.example.luisf11.youtubeclient.adapters.VideoAdapter;
+import com.example.luisf11.youtubeclient.models.ServerConfig;
 import com.example.luisf11.youtubeclient.models.VideoItem;
+import com.example.luisf11.youtubeclient.utils.XmlManager;
 import com.example.luisf11.youtubeclient.utils.YoutubeConnector;
 import com.squareup.picasso.Picasso;
 
@@ -41,6 +44,11 @@ public class SearchActivity extends Activity {
     private Button searchButton;
     private VideoAdapter videoAdapter;
     private Handler handler;
+    private EditText txtIp;
+    private EditText txtPort;
+    private EditText txtPrefix;
+    private XmlManager xmlManager;
+
 
     private ArrayList<VideoItem> searchResults;
 
@@ -52,7 +60,10 @@ public class SearchActivity extends Activity {
         videosFound = (ListView) findViewById(R.id.videos_found);
         searchButton = (Button) findViewById(R.id.button_search);
         handler = new Handler();
-//        showDialog();
+        //dialog to show xml configuration
+        showDialog();
+
+
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -138,14 +149,42 @@ public class SearchActivity extends Activity {
 
     public void showDialog(){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        txtIp = (EditText)findViewById(R.id.text_ip);
+        txtPort = (EditText)findViewById(R.id.text_port);
+        txtPrefix = (EditText)findViewById(R.id.text_prefix);
 
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.server_config,null);
         dialogBuilder.setView(dialogView);
+        dialogBuilder.setTitle("Server Config");
+
+
+
 
         dialogBuilder.setPositiveButton("Done",new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                ServerConfig config = new ServerConfig();
+                xmlManager = new XmlManager();
+
+//                String ip = txtIp.getText().toString();
+//                String port =txtPort.getText().toString();
+//                String prefix = txtPrefix.getText().toString();
+
+                String ip = "123.125.2.2";
+                String port ="8008";
+                String prefix = "br";
+
+
+                config.setIp(ip);
+                config.setPort(port);
+                config.setPrefix(prefix);
+                Log.i("logger","ip: "+ ip);
+                Log.i("logger","port: "+ port);
+                Log.i("logger","prefix: "+ prefix);
+
+                xmlManager.xmlWriter(config,getApplicationContext());
+
 
             }
         });
@@ -157,6 +196,28 @@ public class SearchActivity extends Activity {
         });
         AlertDialog b = dialogBuilder.create();
         b.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //hide soft buttons
+
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        //hide soft buttons
+
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
     @Override
