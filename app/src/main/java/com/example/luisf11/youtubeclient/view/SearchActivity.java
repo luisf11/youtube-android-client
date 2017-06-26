@@ -52,7 +52,10 @@ public class SearchActivity extends Activity {
         videosFound = (ListView) findViewById(R.id.videos_found);
         searchButton = (Button) findViewById(R.id.button_search);
         handler = new Handler();
-//        showDialog();
+        //dialog to show xml configuration
+        showDialog();
+
+
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -142,6 +145,10 @@ public class SearchActivity extends Activity {
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.server_config,null);
         dialogBuilder.setView(dialogView);
+        EditText txtIp = (EditText)findViewById(R.id.text_ip);
+        EditText txtPort = (EditText)findViewById(R.id.text_port);
+        EditText txtPrefix = (EditText)findViewById(R.id.text_prefix);
+        dialogBuilder.setTitle("Server Config");
 
         dialogBuilder.setPositiveButton("Done",new DialogInterface.OnClickListener(){
             @Override
@@ -157,6 +164,28 @@ public class SearchActivity extends Activity {
         });
         AlertDialog b = dialogBuilder.create();
         b.show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //hide soft buttons
+
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        //hide soft buttons
+
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
     }
 
     @Override
