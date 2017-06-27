@@ -25,11 +25,16 @@
             android:text="@string/button_search"
             android:layout_weight="2.5"/>
     </LinearLayout>
-    <ListView
+    <!--<ListView-->
+        <!--android:id="@+id/videos_found"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:dividerHeight="5dp"-->
+        <!--/>-->
+    <android.support.v7.widget.RecyclerView
         android:id="@+id/videos_found"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:dividerHeight="5dp"
-        />
+        android:dividerHeight="5dp"/>
 
 </LinearLayout>
