@@ -8,19 +8,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.widget.AdapterView;
 
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.luisf11.youtubeclient.R;
@@ -29,18 +27,17 @@ import com.example.luisf11.youtubeclient.models.ServerConfig;
 import com.example.luisf11.youtubeclient.models.VideoItem;
 import com.example.luisf11.youtubeclient.utils.XmlManager;
 import com.example.luisf11.youtubeclient.utils.YoutubeConnector;
-import com.squareup.picasso.Picasso;
+
 
 import java.io.File;
-import java.util.ArrayList;
-
+import java.util.List;
 
 
 public class SearchActivity extends Activity {
 
 
     private EditText searchInput;
-    private ListView videosFound;
+//    private ListView videosFound;
     private Button searchButton;
     private VideoAdapter videoAdapter;
     private Handler handler;
@@ -48,20 +45,21 @@ public class SearchActivity extends Activity {
     private EditText txtPort;
     private EditText txtPrefix;
     private XmlManager xmlManager;
+    private RecyclerView recyclerView;
 
 
-    private ArrayList<VideoItem> searchResults;
+    private List<VideoItem> searchResults;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         searchInput = (EditText) findViewById(R.id.search_input);
-        videosFound = (ListView) findViewById(R.id.videos_found);
+        recyclerView = (RecyclerView) findViewById(R.id.videos_found);
         searchButton = (Button) findViewById(R.id.button_search);
         handler = new Handler();
         //dialog to show xml configuration
-        showDialog();
+        //showDialog();
 
 
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -75,9 +73,7 @@ public class SearchActivity extends Activity {
                return true;
             }
         });
-
-
-        addClickListener();
+        
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,48 +99,18 @@ public class SearchActivity extends Activity {
 
                     }
                 });
-//                handler.post(new Runnable(){
-//                    @Override
-//                        public void run() {
-//                            updateVideosFound();
-//
-//                                 }
-//                             });
+
             }
         }.start();
     }
 
     private void updateVideosFound(){
-        ArrayAdapter<VideoItem> adapter = new ArrayAdapter<VideoItem>(getApplicationContext(), R.layout.video_item, searchResults){
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                if(convertView == null){
-                    convertView = getLayoutInflater().inflate(R.layout.video_item, parent, false);
-                }
-                ImageView thumbnail = (ImageView)convertView.findViewById(R.id.video_thumbnail);
-                TextView title = (TextView)convertView.findViewById(R.id.video_title);
-                TextView description = (TextView)convertView.findViewById(R.id.video_description);
 
-                VideoItem searchResult = searchResults.get(position);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        VideoAdapter adapter = new VideoAdapter(searchResults,this);
+        recyclerView.setAdapter(adapter);
 
-                Picasso.with(getApplicationContext()).load(searchResult.getThumbnailURL()).into(thumbnail);
-                title.setText(searchResult.getTitle());
-                description.setText(searchResult.getDescription());
-                return convertView;
-            }
-        };
-        videosFound.setAdapter(adapter);
-//
-    }
-    private void addClickListener(){
-        videosFound.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplication(),PlayerActivity.class);
-                intent.putExtra("VIDEO_ID",searchResults.get(position).getId());
-                startActivity(intent);
-            }
-        });
     }
 
     public void showDialog(){
