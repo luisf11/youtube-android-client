@@ -3,8 +3,11 @@ package com.example.luisf11.youtubeclient.view;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +25,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
     private YouTubePlayerView playerView;
     private AudioManager audio;
+    private String advActivity = "com.example.luisf11.youtubeclient.view.videoAdvertisementActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,9 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     @Override
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         if (!b){
+
+//            Intent adv = new Intent(advActivity);
+//            startActivity(adv);
             youTubePlayer.cueVideo(getIntent().getStringExtra("VIDEO_ID"));
         }
     }
@@ -46,9 +53,10 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         Toast.makeText(this,"Initialization Failed",Toast.LENGTH_LONG).show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB_MR1)
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
-        Log.i("hey listen","hey Listen");
+
         int AXIS_VSCROLL =0;
 //        event.getAxisValue(AXIS_VSCROLL);
         if ( event.getAxisValue(MotionEvent.AXIS_VSCROLL)==1){
@@ -65,6 +73,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         return super.onGenericMotionEvent(event);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onResume() {
         super.onResume();
@@ -76,6 +85,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
         decorView.setSystemUiVisibility(uiOptions);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB_MR1)
     @Override
     public boolean onTrackballEvent(MotionEvent event) {
         int AXIS_VSCROLL =0;

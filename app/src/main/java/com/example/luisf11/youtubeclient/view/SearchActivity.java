@@ -1,60 +1,91 @@
 package com.example.luisf11.youtubeclient.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
+import android.os.Looper;
+import android.support.annotation.RequiresApi;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.luisf11.youtubeclient.R;
+import com.example.luisf11.youtubeclient.adapters.AdvertisementAdapter;
 import com.example.luisf11.youtubeclient.adapters.VideoAdapter;
+import com.example.luisf11.youtubeclient.models.Advertisement;
+import com.example.luisf11.youtubeclient.models.ServerConfig;
 import com.example.luisf11.youtubeclient.models.VideoItem;
+import com.example.luisf11.youtubeclient.utils.XmlManager;
 import com.example.luisf11.youtubeclient.utils.YoutubeConnector;
-import com.squareup.picasso.Picasso;
+
 
 import java.io.File;
 import java.util.ArrayList;
-
+import java.util.Arrays;
+import java.util.List;
 
 
 public class SearchActivity extends Activity {
 
 
     private EditText searchInput;
-    private ListView videosFound;
+
     private Button searchButton;
     private VideoAdapter videoAdapter;
     private Handler handler;
+    private EditText txtIp;
+    private EditText txtPort;
+    private EditText txtPrefix;
+    private XmlManager xmlManager;
+    private RecyclerView recyclerView;
 
-    private ArrayList<VideoItem> searchResults;
 
+//    private List<Advertisement> advertisementImages;
+    private List<VideoItem> searchResults;
+    List<Advertisement> advertisementImages = new ArrayList<>(Arrays.asList(
+            new Advertisement("https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"),
+            new Advertisement("https://www.w3schools.com/css/trolltunga.jpg"),
+            new Advertisement("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn4ufO0l4WyRxifUAKWIdOM0wjhGLv3-mG-ldJDpnZzUSViXEq"),
+            new Advertisement("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9CRhxww7b_RxBGEXeBnIPpScSeQLuFueRylvWsRhsefRpP2HT")
+    ));
+
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         searchInput = (EditText) findViewById(R.id.search_input);
-        videosFound = (ListView) findViewById(R.id.videos_found);
+        recyclerView = (RecyclerView) findViewById(R.id.videos_found);
         searchButton = (Button) findViewById(R.id.button_search);
+
+//        txtIp.setText("192.168.0.5");
+        txtIp = (EditText)findViewById(R.id.text_ip);
+        txtPort = (EditText)findViewById(R.id.text_port);
+        txtPrefix = (EditText)findViewById(R.id.text_prefix);
+
         handler = new Handler();
+
+
         //dialog to show xml configuration
         showDialog();
 
+        //advertisement carusel
+        setAdvertisement();
+        //listener of search box
 
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -69,14 +100,13 @@ public class SearchActivity extends Activity {
         });
 
 
-        addClickListener();
-
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                searchOnYoutube(searchInput.getText().toString());
             }
         });
+
 
 
 
@@ -95,64 +125,63 @@ public class SearchActivity extends Activity {
 
                     }
                 });
-//                handler.post(new Runnable(){
-//                    @Override
-//                        public void run() {
-//                            updateVideosFound();
-//
-//                                 }
-//                             });
+
             }
         }.start();
     }
 
-    private void updateVideosFound(){
-        ArrayAdapter<VideoItem> adapter = new ArrayAdapter<VideoItem>(getApplicationContext(), R.layout.video_item, searchResults){
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                if(convertView == null){
-                    convertView = getLayoutInflater().inflate(R.layout.video_item, parent, false);
-                }
-                ImageView thumbnail = (ImageView)convertView.findViewById(R.id.video_thumbnail);
-                TextView title = (TextView)convertView.findViewById(R.id.video_title);
-                TextView description = (TextView)convertView.findViewById(R.id.video_description);
+    private void setAdvertisement(){
 
-                VideoItem searchResult = searchResults.get(position);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        AdvertisementAdapter adapter = new AdvertisementAdapter(advertisementImages,this);
+        recyclerView.setAdapter(adapter);
 
-                Picasso.with(getApplicationContext()).load(searchResult.getThumbnailURL()).into(thumbnail);
-                title.setText(searchResult.getTitle());
-                description.setText(searchResult.getDescription());
-                return convertView;
-            }
-        };
-        videosFound.setAdapter(adapter);
-//
     }
-    private void addClickListener(){
-        videosFound.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplication(),PlayerActivity.class);
-                intent.putExtra("VIDEO_ID",searchResults.get(position).getId());
-                startActivity(intent);
-            }
-        });
+
+    private void updateVideosFound(){
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        VideoAdapter adapter = new VideoAdapter(searchResults,this);
+        recyclerView.setAdapter(adapter);
+
     }
 
     public void showDialog(){
+
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
 
         LayoutInflater inflater = this.getLayoutInflater();
         final View dialogView = inflater.inflate(R.layout.server_config,null);
         dialogBuilder.setView(dialogView);
-        EditText txtIp = (EditText)findViewById(R.id.text_ip);
-        EditText txtPort = (EditText)findViewById(R.id.text_port);
-        EditText txtPrefix = (EditText)findViewById(R.id.text_prefix);
+
         dialogBuilder.setTitle("Server Config");
 
         dialogBuilder.setPositiveButton("Done",new DialogInterface.OnClickListener(){
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+                ServerConfig config = new ServerConfig();
+                xmlManager = new XmlManager();
+
+//                String ip = txtIp.getText().toString();
+//                String port =txtPort.getText().toString();
+//                String prefix = txtPrefix.getText().toString();
+
+                String ip = "123.125.2.2";
+                String port ="8008";
+                String prefix = "br";
+
+
+                config.setIp(ip);
+                config.setPort(port);
+                config.setPrefix(prefix);
+                Log.i("logger","ip: "+ ip);
+                Log.i("logger","port: "+ port);
+                Log.i("logger","prefix: "+ prefix);
+
+                xmlManager.xmlWriter(config,getApplicationContext());
+
 
             }
         });
@@ -166,6 +195,7 @@ public class SearchActivity extends Activity {
         b.show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onResume() {
         super.onResume();
@@ -177,6 +207,7 @@ public class SearchActivity extends Activity {
         decorView.setSystemUiVisibility(uiOptions);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
