@@ -48,7 +48,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
     @Override
     public boolean onGenericMotionEvent(MotionEvent event) {
-        Log.i("hey listen","hey Listen");
+
         int AXIS_VSCROLL =0;
 //        event.getAxisValue(AXIS_VSCROLL);
         if ( event.getAxisValue(MotionEvent.AXIS_VSCROLL)==1){
