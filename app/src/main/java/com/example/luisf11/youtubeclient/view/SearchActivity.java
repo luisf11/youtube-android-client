@@ -5,11 +5,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.AdapterView;
 
+import android.os.Looper;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,7 +21,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.luisf11.youtubeclient.R;
+import com.example.luisf11.youtubeclient.adapters.AdvertisementAdapter;
 import com.example.luisf11.youtubeclient.adapters.VideoAdapter;
+import com.example.luisf11.youtubeclient.models.Advertisement;
 import com.example.luisf11.youtubeclient.models.ServerConfig;
 import com.example.luisf11.youtubeclient.models.VideoItem;
 import com.example.luisf11.youtubeclient.utils.XmlManager;
@@ -30,6 +31,8 @@ import com.example.luisf11.youtubeclient.utils.YoutubeConnector;
 
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -37,7 +40,7 @@ public class SearchActivity extends Activity {
 
 
     private EditText searchInput;
-//    private ListView videosFound;
+
     private Button searchButton;
     private VideoAdapter videoAdapter;
     private Handler handler;
@@ -47,8 +50,25 @@ public class SearchActivity extends Activity {
     private XmlManager xmlManager;
     private RecyclerView recyclerView;
 
+    final int duration = 10;
+    final int pixelsToMove = 30;
+    private final Handler mhandler = new Handler(Looper.getMainLooper());
+    private final Runnable SCROLLING_RUNNABLE = new Runnable() {
+        @Override
+        public void run() {
+            recyclerView.smoothScrollBy(pixelsToMove,0);
+            mhandler.postDelayed(this,duration);
+        }
+    };
 
+//    private List<Advertisement> advertisementImages;
     private List<VideoItem> searchResults;
+    List<Advertisement> advertisementImages = new ArrayList<>(Arrays.asList(
+            new Advertisement("https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"),
+            new Advertisement("https://www.w3schools.com/css/trolltunga.jpg"),
+            new Advertisement("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn4ufO0l4WyRxifUAKWIdOM0wjhGLv3-mG-ldJDpnZzUSViXEq"),
+            new Advertisement("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9CRhxww7b_RxBGEXeBnIPpScSeQLuFueRylvWsRhsefRpP2HT")
+    ));
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +79,11 @@ public class SearchActivity extends Activity {
         searchButton = (Button) findViewById(R.id.button_search);
         handler = new Handler();
         //dialog to show xml configuration
-        //showDialog();
+//        showDialog();
 
-
+        //advertisement carusel
+        setAdvertisement();
+        //listener of search box
         searchInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -73,7 +95,7 @@ public class SearchActivity extends Activity {
                return true;
             }
         });
-        
+
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +103,7 @@ public class SearchActivity extends Activity {
                searchOnYoutube(searchInput.getText().toString());
             }
         });
+
 
 
 
@@ -104,7 +127,40 @@ public class SearchActivity extends Activity {
         }.start();
     }
 
+    private void setAdvertisement(){
+
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+        final AdvertisementAdapter adapter = new AdvertisementAdapter(advertisementImages,this);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(final RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
+                if(lastItem == linearLayoutManager.getItemCount()-1){
+                    mhandler.removeCallbacks(SCROLLING_RUNNABLE);
+                    Handler postHandler = new Handler();
+                    postHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerView.setAdapter(null);
+                            recyclerView.setAdapter(adapter);
+                            mhandler.postDelayed(SCROLLING_RUNNABLE,2000);
+                        }
+                    },2000);
+                }
+            }
+        });
+        mhandler.postDelayed(SCROLLING_RUNNABLE,2000);
+//        recyclerView.setLayoutManager(linearLayoutManager);
+//        AdvertisementAdapter adapter = new AdvertisementAdapter(advertisementImages,this);
+//        recyclerView.smoothScrollToPosition(1);
+//        recyclerView.setAdapter(adapter);
+
+    }
+
     private void updateVideosFound(){
+
+//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -168,6 +224,7 @@ public class SearchActivity extends Activity {
     protected void onResume() {
         super.onResume();
         //hide soft buttons
+
 
         View decorView = getWindow().getDecorView();
         int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
