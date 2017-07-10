@@ -1,14 +1,17 @@
 package com.example.luisf11.youtubeclient.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
 import android.os.Looper;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -61,6 +64,7 @@ public class SearchActivity extends Activity {
             new Advertisement("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9CRhxww7b_RxBGEXeBnIPpScSeQLuFueRylvWsRhsefRpP2HT")
     ));
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,7 +82,11 @@ public class SearchActivity extends Activity {
 
 
         //dialog to show xml configuration
+<<<<<<< HEAD
 //        showDialog();
+=======
+        showDialog();
+>>>>>>> aff9eecbe12244fa70cb029dda664a5d362764d4
 
         //advertisement carusel
         setAdvertisement();
@@ -130,6 +138,7 @@ public class SearchActivity extends Activity {
     private void setAdvertisement(){
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
+<<<<<<< HEAD
 //        final AdvertisementAdapter adapter = new AdvertisementAdapter(advertisementImages,this);
 //        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //            @Override
@@ -154,13 +163,15 @@ public class SearchActivity extends Activity {
         recyclerView.setLayoutManager(linearLayoutManager);
         AdvertisementAdapter adapter = new AdvertisementAdapter(advertisementImages,this);
 //        recyclerView.smoothScrollToPosition(1);
+=======
+        recyclerView.setLayoutManager(linearLayoutManager);
+        AdvertisementAdapter adapter = new AdvertisementAdapter(advertisementImages,this);
+>>>>>>> aff9eecbe12244fa70cb029dda664a5d362764d4
         recyclerView.setAdapter(adapter);
 
     }
 
     private void updateVideosFound(){
-
-//        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -216,6 +227,7 @@ public class SearchActivity extends Activity {
         b.show();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onResume() {
         super.onResume();
@@ -227,6 +239,7 @@ public class SearchActivity extends Activity {
         decorView.setSystemUiVisibility(uiOptions);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
