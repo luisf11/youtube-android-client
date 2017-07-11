@@ -7,8 +7,9 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
@@ -25,7 +26,7 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
 
     private YouTubePlayerView playerView;
     private AudioManager audio;
-    private String advActivity = "com.example.luisf11.youtubeclient.view.videoAdvertisementActivity";
+    private String advActivity = "com.example.luisf11.youtubeclient.view.VideoAdvertisementActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +43,17 @@ public class PlayerActivity extends YouTubeBaseActivity implements YouTubePlayer
     public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
         if (!b){
 
-//            Intent adv = new Intent(advActivity);
-//            startActivity(adv);
+
             youTubePlayer.cueVideo(getIntent().getStringExtra("VIDEO_ID"));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+
+                    final  Intent adv = new Intent(PlayerActivity.this,VideoAdvertisementActivity.class);
+                    startActivity(adv);
+                    finish();
+                }
+            },5000);
         }
     }
 

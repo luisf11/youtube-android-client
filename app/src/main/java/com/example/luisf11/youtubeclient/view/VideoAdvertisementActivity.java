@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.util.Log;
+import android.widget.Toast;
 
 
 import com.example.luisf11.youtubeclient.R;
@@ -12,7 +14,7 @@ import com.example.luisf11.youtubeclient.R;
  * Created by Luis Fernando Pena on 7/10/2017.
  */
 
-public class videoAdvertisementActivity extends Activity {
+public class VideoAdvertisementActivity extends Activity {
 
    private  String PlayerActivity = "com.example.luisf11.youtubeclient.view.PlayerActivity";
 
@@ -21,20 +23,9 @@ public class videoAdvertisementActivity extends Activity {
         super.onCreate(savedInstanceState, persistentState);
         setContentView(R.layout.video_advertisement);
 
-//        Thread advTimer = new Thread(){
-//            public void run(){
-//                try{
-//                    sleep(2500);
-//                    Intent playerIntent = new Intent(PlayerActivity);
-//                    startActivity(playerIntent);
-//                }catch (InterruptedException e){
-//                    e.printStackTrace();
-//                }finally {
-//                    finish();
-//                }
-//            }
-//        };
-//        advTimer.start();
+        Toast.makeText(this,"Initialization adv ",Toast.LENGTH_LONG).show();
+
+        Log.i("debb","hey hey listen");
 
     }
 }

@@ -57,7 +57,6 @@ public class SearchActivity extends Activity {
 //    private List<Advertisement> advertisementImages;
     private List<VideoItem> searchResults;
     List<Advertisement> advertisementImages = new ArrayList<>(Arrays.asList(
-            new Advertisement("/storage/ext_sd/ivans/Images/1.png"),
             new Advertisement("https://tse4.mm.bing.net/th?id=ORT.TH_470633631&pid=1.12&eid=G.470633631"),
             new Advertisement("https://www.w3schools.com/css/trolltunga.jpg"),
             new Advertisement("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTn4ufO0l4WyRxifUAKWIdOM0wjhGLv3-mG-ldJDpnZzUSViXEq"),
@@ -82,11 +81,10 @@ public class SearchActivity extends Activity {
 
 
         //dialog to show xml configuration
-<<<<<<< HEAD
+
 //        showDialog();
-=======
-        showDialog();
->>>>>>> aff9eecbe12244fa70cb029dda664a5d362764d4
+
+
 
         //advertisement carusel
         setAdvertisement();
@@ -138,35 +136,9 @@ public class SearchActivity extends Activity {
     private void setAdvertisement(){
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
-<<<<<<< HEAD
-//        final AdvertisementAdapter adapter = new AdvertisementAdapter(advertisementImages,this);
-//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrolled(final RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                int lastItem = linearLayoutManager.findFirstCompletelyVisibleItemPosition();
-//                if(lastItem == linearLayoutManager.getItemCount()-1){
-//                    mhandler.removeCallbacks(SCROLLING_RUNNABLE);
-//                    Handler postHandler = new Handler();
-//                    postHandler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            recyclerView.setAdapter(null);
-//                            recyclerView.setAdapter(adapter);
-//                            mhandler.postDelayed(SCROLLING_RUNNABLE,2000);
-//                        }
-//                    },2000);
-//                }
-//            }
-//        });
-//        mhandler.postDelayed(SCROLLING_RUNNABLE,2000);
         recyclerView.setLayoutManager(linearLayoutManager);
         AdvertisementAdapter adapter = new AdvertisementAdapter(advertisementImages,this);
-//        recyclerView.smoothScrollToPosition(1);
-=======
-        recyclerView.setLayoutManager(linearLayoutManager);
-        AdvertisementAdapter adapter = new AdvertisementAdapter(advertisementImages,this);
->>>>>>> aff9eecbe12244fa70cb029dda664a5d362764d4
+
         recyclerView.setAdapter(adapter);
 
     }
